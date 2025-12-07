@@ -1,0 +1,209 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f6fa;
+  font-family: "Roboto", sans-serif;
+}
+
+.navbar-root {
+  background-color: #005b96 !important; 
+  padding: 8px 0 !important;
+}
+
+.navbar-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 20px !important;
+}
+
+.navbar-title {
+  color: #ffffff !important;
+  font-size: 22px;
+  font-weight: 700 !important;
+  letter-spacing: 0.6px;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-btn {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  font-size: 15px !important;
+  padding: 6px 14px !important;
+  border-radius: 6px !important;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.navbar-btn:hover {
+  background-color: #00406b !important; 
+  transform: translateY(-1px);
+}
+
+.dashboard-card {
+  width: 100%;
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.dashboard-table-wrapper {
+  width: 100%;
+}
+
+.dashboard-table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Table Header */
+.table-head {
+  background-color: #005b96 !important;
+}
+
+.table-head th,
+.table-head td {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 15px;
+  padding: 10px 12px !important;
+  letter-spacing: 0.3px;
+  border-bottom: 2px solid #00406b !important;
+}
+
+.dashboard-row:hover {
+  background: #eef6ff !important;
+  transition: 0.2s ease-in-out;
+}
+
+.dashboard-actions {
+  white-space: nowrap;
+}
+
+/* FORMS */
+.form-card {
+  width: 100%;
+  max-width: 650px;
+  margin: 32px auto;
+  padding: 28px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-card .MuiTextField-root {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.form-card .MuiButton-root {
+  align-self: flex-start;
+}
+
+.MuiDialogContent-root p {
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-card {
+    margin: 16px auto;
+    padding: 18px;
+  }
+
+  .form-card {
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .navbar-toolbar {
+    padding-inline: 14px !important;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .navbar-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .navbar-links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .navbar-btn {
+    flex: 1 1 48%;
+    justify-content: center;
+  }
+
+  .dashboard-table-wrapper table,
+  .dashboard-table-wrapper thead,
+  .dashboard-table-wrapper tbody,
+  .dashboard-table-wrapper th,
+  .dashboard-table-wrapper td,
+  .dashboard-table-wrapper tr {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-table-wrapper thead {
+    display: none;
+  }
+
+  /* each row = card */
+  .dashboard-row {
+    margin-bottom: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: #ffffff;
+  }
+
+  .dashboard-row td {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+
+  .dashboard-row td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: 6px;
+    color: #555;
+  }
+
+  .dashboard-actions {
+    justify-content: flex-end;
+  }
+
+  .form-card {
+    width: 100%;
+    margin: 16px auto;
+    padding: 16px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .navbar-btn {
+    flex: 1 1 100%;
+  }
+}
