@@ -21,17 +21,25 @@ import { useNavigate } from "react-router-dom";
 import "../styles/style.css";
 
 const Dashboard = () => {
-  const [data, setData] = useState([]);
-  const [deleteId, setDeleteId] = useState(null); // which feedback to delete
-  const [openDialog, setOpenDialog] = useState(false); // dialog visibility
+  const [data, setData] = useState([]); // Ensure array default
+  const [deleteId, setDeleteId] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
 
   const loadData = async () => {
     try {
       const res = await axiosInstance.get("/feedback");
-      setData(res.data);
+
+      // Ensure safe array input
+      if (Array.isArray(res.data)) {
+        setData(res.data);
+      } else {
+        console.error("API did not return an array:", res.data);
+        setData([]);
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Fetch error:", err);
+      setData([]);
     }
   };
 
@@ -45,17 +53,16 @@ const Dashboard = () => {
   };
 
   const handleCloseDialog = () => {
-    setOpenDialog(false);
     setDeleteId(null);
+    setOpenDialog(false);
   };
 
   const handleConfirmDelete = async () => {
-    if (!deleteId) return;
     try {
       await axiosInstance.delete(`/feedback/${deleteId}`);
-      await loadData();
+      loadData();
     } catch (err) {
-      console.error(err);
+      console.error("Delete error:", err);
     } finally {
       handleCloseDialog();
     }
@@ -77,53 +84,71 @@ const Dashboard = () => {
             </TableHead>
 
             <TableBody>
-              {data.map((item) => (
-                <TableRow key={item._id} className="dashboard-row">
-                  <TableCell data-label="Course ID">{item.courseId}</TableCell>
-                  <TableCell data-label="Course Name">
-                    {item.courseName}
-                  </TableCell>
-                  <TableCell data-label="Duration">
-                    {item.courseDuration}
-                  </TableCell>
-                  <TableCell data-label="Rating">
-                    <Rating value={item.rating} readOnly size="small" />
-                  </TableCell>
+              {data.length > 0 ? (
+                data.map((item) => (
+                  <TableRow key={item._id} className="dashboard-row">
+                    <TableCell data-label="Course ID">{item.courseId}</TableCell>
+                    <TableCell data-label="Course Name">
+                      {item.courseName}
+                    </TableCell>
+                    <TableCell data-label="Duration">
+                      {item.courseDuration}
+                    </TableCell>
+                    <TableCell data-label="Rating">
+                      <Rating value={item.rating} readOnly size="small" />
+                    </TableCell>
+                    <TableCell
+                      data-label="Actions"
+                      className="dashboard-actions"
+                    >
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          navigate(`/edit-feedback/${item._id}`)
+                        }
+                      >
+                        <Edit color="primary" fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={() => askDelete(item._id)}
+                      >
+                        <Delete color="error" fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
                   <TableCell
-                    data-label="Actions"
-                    className="dashboard-actions"
+                    colSpan={5}
+                    style={{ textAlign: "center", padding: "20px" }}
                   >
-                    <IconButton
-                      size="small"
-                      onClick={() => navigate(`/edit-feedback/${item._id}`)}
-                    >
-                      <Edit color="primary" fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => askDelete(item._id)}
-                    >
-                      <Delete color="error" fontSize="small" />
-                    </IconButton>
+                    No feedback found.
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>
       </Paper>
 
-      {/* 🔔 Delete Confirmation Dialog */}
+      {/* Delete Confirmation Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Delete Feedback</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete this feedback?
+            Are you sure you want to delete this feedback? This action cannot be
+            undone.
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button color="error" variant="contained" onClick={handleConfirmDelete}>
+          <Button
+            color="error"
+            variant="contained"
+            onClick={handleConfirmDelete}
+          >
             Delete
           </Button>
         </DialogActions>
